@@ -1,0 +1,70 @@
+<!-- src/templates/chat.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Fiscal IA</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
+</head>
+<body>
+  <div class="chat-layout">
+    <aside class="chat-sidebar">
+      <div class="sidebar-section">
+        <h2>Configuração das APIs</h2>
+        <p class="sidebar-description">Conecte o agente às ferramentas de análise fiscal e pesquisa web para receber respostas atualizadas.</p>
+
+        <label for="apiKeyInput">Chave API Google Gemini</label>
+        <input type="password" id="apiKeyInput" placeholder="Insira sua chave iniciada em AIza...">
+        <p class="hint">Use a chave do Google AI Studio para permitir respostas com contexto das suas notas fiscais.</p>
+
+        <label for="tavilyKeyInput">Chave API Tavily (opcional)</label>
+        <input type="password" id="tavilyKeyInput" placeholder="Ative buscas fiscais na web">
+        <p class="hint">Com a Tavily, o agente pesquisa alíquotas, leis e códigos fiscais em fontes atualizadas.</p>
+
+        <button id="ativarChaves">Ativar chaves</button>
+        <div id="apiStatus" class="status-message hidden"></div>
+
+        <div class="status-badges">
+          <span id="googleBadge" class="badge">Google Gemini</span>
+          <span id="tavilyBadge" class="badge">Tavily Search</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3>Dicas rápidas</h3>
+        <ul class="hint-list">
+          <li>Faça upload das notas no dashboard antes de conversar.</li>
+          <li>Questione sobre impostos, CFOP, enquadramentos e tendências.</li>
+          <li>Use o chat para validar obrigações fiscais antes de enviar ao contador.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="chat-panel">
+      <div class="chat-container">
+        <header>
+          <h1>Chat Fiscal IA</h1>
+          <button onclick="window.location.href='/dashboard'">Voltar</button>
+        </header>
+
+        <div id="activationBanner" class="activation-banner hidden">
+          <strong>Ferramentas conectadas!</strong>
+          <span class="activation-banner-text">O assistente está usando inteligência fiscal atualizada.</span>
+        </div>
+
+        <div class="chat-box" id="chat-box">
+          <div class="chat-message bot">Olá! Sou seu assistente fiscal. Ative as chaves na lateral e digite sua pergunta abaixo.</div>
+        </div>
+
+        <footer>
+          <input type="text" id="pergunta" placeholder="Digite sua pergunta fiscal...">
+          <button id="enviar">Enviar</button>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='scripts/chat.js') }}"></script>
+</body>
+</html>

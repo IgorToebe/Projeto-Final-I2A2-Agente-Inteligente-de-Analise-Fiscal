@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Portal Fiscal NEXA IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-layout">
+        <aside class="config-sidebar">
+            <div class="sidebar-section">
+                <h2>Configuração das APIs</h2>
+                <p class="sidebar-description">Ative as integrações antes de enviar as notas fiscais para que o agente possa analisá-las e gerar insights.</p>
+
+                <label for="dashboardApiKeyInput">Chave API Google Gemini</label>
+                <input type="password" id="dashboardApiKeyInput" placeholder="Insira sua chave iniciada em AIza...">
+                <p class="hint">A mesma chave é utilizada no chat e no processamento dos arquivos enviados.</p>
+
+                <label for="dashboardTavilyKeyInput">Chave API Tavily (opcional)</label>
+                <input type="password" id="dashboardTavilyKeyInput" placeholder="Ative buscas fiscais na web">
+                <p class="hint">Com a Tavily, os relatórios incluem referências de legislação e notícias atualizadas.</p>
+
+                <button id="dashboardAtivarChaves">Ativar chaves</button>
+                <div id="dashboardApiStatus" class="status-message hidden"></div>
+
+                <div class="status-badges">
+                    <span id="dashboardGoogleBadge" class="badge">Google Gemini</span>
+                    <span id="dashboardTavilyBadge" class="badge">Tavily Search</span>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Próximos passos</h3>
+                <ul class="hint-list">
+                    <li>Carregue PDFs ou XMLs para atualizar o painel.</li>
+                    <li>Consulte o chat para detalhar tributos e obrigações.</li>
+                    <li>Revise as integrações periodicamente.</li>
+                </ul>
+            </div>
+        </aside>
+
+        <div class="dashboard-container">
+            <header class="header">
+                <h1>Portal Fiscal NEXA</h1>
+                <button class="logout-btn" id="logoutBtn">Sair</button>
+            </header>
+
+            <main class="main-content">
+                <nav class="dashboard-tabs" id="dashboardTabs"></nav>
+                <div class="dashboard-screens" id="dashboardScreens"></div>
+
+                <section class="empresa-info screen-section" data-section-id="empresaInfo" id="empresaInfoSection">
+                    <h2>Dados da Empresa</h2>
+                    <p><strong>Nome:</strong> <span id="nomeEmpresa">Carregando...</span></p>
+                    <p><strong>Regime Tributário:</strong> <span id="regimeEmpresa">Carregando...</span></p>
+                    <p><strong>Natureza Jurídica:</strong> <span id="naturezaEmpresa">Carregando...</span></p>
+                    <p>
+                        <strong>RBT12 (últimos 12 meses):</strong> <span id="rbt12">Carregando...</span>
+                        <input type="number" id="rbt12Input" placeholder="Ex: 500000.00" step="0.01">
+                        <button id="salvarRbt12Btn">Salvar</button>
+                    </p>
+                </section>
+
+                <section class="dashboard-metrics screen-section" data-section-id="dashboardMetrics" id="dashboardMetricsSection">
+                    <h2>Dashboard de Vendas</h2>
+                    <div class="metrics-grid">
+                        <div class="metric-card">
+                            <h3>Faturamento Bruto</h3>
+                            <p id="faturamento">R$ 0,00</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Notas de Venda</h3>
+                            <p id="numNotas">0</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Ticket Médio</h3>
+                            <p id="ticketMedio">R$ 0,00</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Clientes Únicos</h3>
+                            <p id="numClientes">0</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="fiscalDashboardSection" class="fiscal-dashboard-section screen-section" data-section-id="fiscalDashboard">
+                    <div class="fiscal-dashboard-header">
+                        <h2>Dashboard Fiscal</h2>
+                        <p class="fiscal-helper-text">Análise visual estratégica da carga tributária e classificação das notas fiscais.</p>
+                    </div>
+
+                    <div id="fiscalLoadingState" class="fiscal-loading">
+                        <div class="loading-spinner"></div>
+                        <p>Carregando dados fiscais...</p>
+                    </div>
+
+                    <div id="fiscalErrorState" class="fiscal-error hidden">
+                        <p>⚠️ Erro ao carregar dados fiscais. Tente novamente mais tarde.</p>
+                    </div>
+
+                    <div id="fiscalChartsContainer" class="fiscal-charts-grid hidden">
+                        <div class="fiscal-chart-card">
+                            <h3>Classificação de Notas (Entrada vs. Saída)</h3>
+                            <p class="chart-subtitle">Proporção do volume de Notas Fiscais</p>
+                            <canvas id="classificacaoChart"></canvas>
+                        </div>
+
+                        <div class="fiscal-chart-card">
+                            <h3>Impostos Consolidados Totais</h3>
+                            <p class="chart-subtitle">Comparação da carga total ICMS, PIS e COFINS</p>
+                            <canvas id="impostosConsolidadosChart"></canvas>
+                        </div>
+
+                        <div class="fiscal-chart-card fiscal-chart-wide">
+                            <h3>Composição de Impostos por Nota Fiscal</h3>
+                            <p class="chart-subtitle">Detalhamento da carga tributária dentro de cada NF</p>
+                            <canvas id="impostosPorNotaChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="chatSection" class="chat-embedded screen-section" data-section-id="chatSection">
+                    <div class="chat-embedded-header">
+                        <h2>Chat Fiscal IA</h2>
+                        <p class="chat-helper-text">Converse com o agente para esclarecer dúvidas sobre impostos, obrigações e análises das notas enviadas.</p>
+                    </div>
+
+                    <div id="activationBanner" class="activation-banner hidden">
+                        <strong>Ferramentas conectadas!</strong>
+                        <span class="activation-banner-text">O assistente está usando inteligência fiscal atualizada.</span>
+                    </div>
+
+                    <div class="chat-box" id="chat-box">
+                        <div class="chat-message bot">Olá! Sou seu assistente fiscal. Ative as chaves na lateral e digite sua pergunta abaixo.</div>
+                    </div>
+
+                    <footer class="chat-footer">
+                        <input type="text" id="pergunta" placeholder="Digite sua pergunta fiscal...">
+                        <button id="enviar">Enviar</button>
+                        <button id="limparHistorico" class="btn-secondary" onclick="limparHistoricoChat()" title="Limpar memória da conversa">🔄 Nova Conversa</button>
+                    </footer>
+                </section>
+
+                <section id="uploadSection" class="upload-section screen-section" data-section-id="upload">
+                    <div class="upload-section-header">
+                        <div>
+                            <h2>Upload de Notas</h2>
+                            <p class="upload-helper-text">Envie arquivos PDF, XML ou CSV para atualizar as análises do painel.</p>
+                        </div>
+                        <div class="status-badges">
+                            <span id="uploadGoogleBadge" class="badge">Google Gemini</span>
+                            <span id="uploadTavilyBadge" class="badge">Tavily Search</span>
+                        </div>
+                    </div>
+
+                    <div id="uploadKeyStatus" class="status-message hidden"></div>
+
+                    <form id="uploadForm" class="upload-form" enctype="multipart/form-data" novalidate>
+                        <div id="upload-box" class="upload-box" role="button" tabindex="0" aria-label="Selecione ou arraste arquivos PDF, XML ou CSV">
+                            <input type="file" id="file-input" name="files" class="file-input" multiple accept=".pdf,.xml,.csv" aria-hidden="true">
+                            <div class="upload-box-content">
+                                <div class="upload-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                                        <path d="M12 3a1 1 0 0 1 .94.66l.03.1.74 2.96 1.15-.66a1 1 0 0 1 1.36.36c.2.35.12.79-.18 1.05l-.09.07-3.35 2.2a1 1 0 0 1-1.11 0l-3.35-2.2a1 1 0 0 1 1.07-1.7l.09.06 1.15.67.74-2.97A1 1 0 0 1 12 3Zm7 8a1 1 0 0 1 .12 1.99L19 13h-1v5a3 3 0 0 1-2.82 3H8.82A3 3 0 0 1 6 18v-5H5a1 1 0 0 1-.12-1.99L5 11h14Z" />
+                                    </svg>
+                                </div>
+                                <p class="upload-title">Arraste e solte os arquivos aqui</p>
+                                <p class="upload-subtitle">ou</p>
+                                <button type="button" id="file-trigger" class="file-trigger">Escolher arquivos</button>
+                                <span class="upload-hint">Formatos aceitos: PDF, XML e CSV</span>
+                            </div>
+                        </div>
+
+                        <div id="file-preview" class="file-preview hidden" aria-live="polite"></div>
+
+                        <button type="submit" id="upload-btn" class="btn-enviar" disabled>
+                            Enviar para processamento
+                        </button>
+                    </form>
+
+                    <div id="uploadStatus" class="result-box" aria-live="polite"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='scripts/dashboard.js') }}"></script>
+</body>
+</html>

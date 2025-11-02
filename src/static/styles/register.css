@@ -1,0 +1,97 @@
+@import url("./theme.css");
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg) var(--spacing-md);
+    background: var(--gradient-body);
+}
+
+.register-container {
+    width: min(100%, 480px);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: calc(var(--spacing-lg) + 8px) var(--spacing-lg);
+    box-shadow: var(--shadow-strong);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+    backdrop-filter: blur(24px);
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.register-container p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+}
+
+.register-container form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.register-container input {
+    width: 100%;
+    height: 52px;
+    padding: 0 var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--color-text-primary);
+    transition: border var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+.register-container input:focus {
+    border-color: var(--input-border-focus);
+    box-shadow: 0 0 0 3px var(--color-brand-soft);
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.register-container button {
+    width: 100%;
+    background: linear-gradient(135deg, var(--color-success-strong), var(--color-success));
+    color: var(--color-text-primary);
+    box-shadow: 0 18px 30px rgba(34, 197, 94, 0.28);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.register-container button:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.register-container button:active {
+    transform: translateY(0);
+    filter: brightness(0.96);
+}
+
+.register-container button:disabled {
+    background: rgba(34, 197, 94, 0.25);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.mensagem {
+    min-height: 20px;
+    font-size: 0.95rem;
+    color: var(--color-danger);
+}
+
+@media (max-width: 540px) {
+    .register-container {
+        padding: var(--spacing-md);
+    }
+}

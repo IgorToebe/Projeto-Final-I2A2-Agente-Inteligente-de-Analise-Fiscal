@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | Portal Fiscal NEXA IA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/register.css') }}">
+</head>
+<body>
+    <div class="register-container">
+        <h1>Cadastro de Empresa</h1>
+        <form id="registerForm">
+            <input type="text" id="cnpj" placeholder="CNPJ válido" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p>Já possui conta? <a href="/">Faça login</a></p>
+        <p id="mensagem" class="mensagem"></p>
+    </div>
+    <script src="{{ url_for('static', filename='scripts/register.js') }}"></script>
+</body>
+</html>

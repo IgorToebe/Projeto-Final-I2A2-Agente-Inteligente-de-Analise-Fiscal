@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enviar Notas Fiscais</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/dashboard.css') }}">
+    <script defer src="/static/scripts/upload.js"></script>
+</head>
+<body class="upload-page-body">
+    <div class="upload-page">
+        <header class="upload-header">
+            <h1>Enviar Notas Fiscais</h1>
+            <button class="btn-voltar" onclick="window.location.href='/dashboard'">Voltar</button>
+        </header>
+
+        <main class="upload-section">
+            <p class="upload-description">Selecione arquivos <b>XML</b> ou <b>PDF</b> de notas fiscais:</p>
+
+            <div id="upload-box" class="upload-box" 
+                 role="button"
+                 tabindex="0"
+                 aria-label="Selecione ou arraste arquivos PDF ou XML"
+                 ondrop="handleDrop(event)" 
+                 ondragover="handleDragOver(event)"
+                 ondragleave="handleDragLeave(event)">
+                <input type="file" id="file-input" class="file-input" multiple accept=".xml,.pdf" aria-hidden="true">
+                <div class="upload-box-content">
+                    <div class="upload-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+                            <path d="M12 3a1 1 0 0 1 .94.66l.03.1.74 2.96 1.15-.66a1 1 0 0 1 1.36.36c.2.35.12.79-.18 1.05l-.09.07-3.35 2.2a1 1 0 0 1-1.11 0l-3.35-2.2a1 1 0 0 1 1.07-1.7l.09.06 1.15.67.74-2.97A1 1 0 0 1 12 3Zm7 8a1 1 0 0 1 .12 1.99L19 13h-1v5a3 3 0 0 1-2.82 3H8.82A3 3 0 0 1 6 18v-5H5a1 1 0 0 1-.12-1.99L5 11h14Z" />
+                        </svg>
+                    </div>
+                    <p class="upload-title">Arraste e solte os arquivos aqui</p>
+                    <p class="upload-subtitle">ou</p>
+                    <button type="button" id="file-trigger" class="file-trigger">Escolher arquivos</button>
+                    <span class="upload-hint">Formatos aceitos: XML e PDF</span>
+                </div>
+            </div>
+
+            <div id="file-preview" class="file-preview hidden" aria-live="polite"></div>
+
+            <button id="upload-btn" class="btn-enviar" disabled>Enviar para processamento</button>
+
+            <div id="result" class="result-box" aria-live="polite"></div>
+        </main>
+    </div>
+</body>
+</html>

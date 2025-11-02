@@ -1,0 +1,129 @@
+/*
+   Shared dark-mode design tokens to keep all pages visually aligned.
+*/
+
+:root {
+	--font-sans: "Inter", "Poppins", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+
+	--color-bg-body: #05070f;
+	--color-bg-overlay: #0b1120;
+	--color-bg-card: #10192b;
+	--color-bg-elevated: rgba(13, 23, 42, 0.92);
+	--color-bg-subtle: rgba(17, 25, 40, 0.72);
+	--color-border: rgba(71, 85, 105, 0.35);
+	--color-border-strong: rgba(148, 163, 184, 0.45);
+
+	--color-text-primary: #f8fafc;
+	--color-text-secondary: #cbd5f5;
+	--color-text-muted: #8a9bb8;
+	--color-placeholder: rgba(148, 163, 184, 0.55);
+
+	--color-brand: #60a5fa;
+	--color-brand-strong: #2563eb;
+	--color-brand-soft: rgba(96, 165, 250, 0.12);
+	--color-success: #22c55e;
+	--color-success-strong: #16a34a;
+	--color-danger: #ef4444;
+
+	--gradient-body: radial-gradient(120% 160% at 12% 10%, rgba(37, 99, 235, 0.26), transparent 64%),
+					  radial-gradient(120% 160% at 88% 0%, rgba(14, 165, 233, 0.18), transparent 58%),
+					  #05070f;
+
+	--shadow-soft: 0 12px 30px rgba(8, 15, 31, 0.25);
+	--shadow-strong: 0 26px 60px rgba(8, 15, 31, 0.42);
+
+	--radius-sm: 10px;
+	--radius-md: 14px;
+	--radius-lg: 20px;
+
+	--transition-base: 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+	--transition-fast: 0.16s ease-in-out;
+
+	--input-bg: rgba(15, 23, 42, 0.85);
+	--input-border: rgba(148, 163, 184, 0.22);
+	--input-border-focus: rgba(96, 165, 250, 0.65);
+
+	--button-height: 48px;
+	--container-width: 420px;
+	--spacing-xs: 8px;
+	--spacing-sm: 12px;
+	--spacing-md: 20px;
+	--spacing-lg: 32px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	font-family: var(--font-sans);
+	background: var(--gradient-body);
+	color: var(--color-text-primary);
+	-webkit-font-smoothing: antialiased;
+}
+
+a {
+	color: var(--color-brand);
+	text-decoration: none;
+	transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+a:hover {
+	color: var(--color-brand-strong);
+}
+
+input,
+button,
+textarea,
+select {
+	font-family: inherit;
+	font-size: 1rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--color-placeholder);
+}
+
+button {
+	height: var(--button-height);
+	border-radius: var(--radius-sm);
+	border: none;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+	transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast), filter var(--transition-fast);
+	cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+	outline: 2px solid var(--color-brand);
+	outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: rgba(15, 23, 42, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgba(96, 165, 250, 0.4);
+	border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: rgba(96, 165, 250, 0.65);
+}
+
+::selection {
+	background: rgba(96, 165, 250, 0.35);
+	color: var(--color-text-primary);
+}

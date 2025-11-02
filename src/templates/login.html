@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Portal Fiscal NEXA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-wrap">
+            <img src="{{ url_for('static', filename='images/logo_nexa.png') }}" alt="Logo NEXA" class="logo-nexa">
+        </div>
+        <h1>Portal Fiscal NEXA</h1>
+        <form id="loginForm">
+            <input type="text" id="cnpj" placeholder="CNPJ" required>
+            <input type="password" id="senha" placeholder="Senha" required>
+            <button type="submit">Entrar</button>
+        </form>
+        <p>Não tem conta? <a href="/register">Cadastre-se</a></p>
+        <p id="mensagem" class="mensagem"></p>
+    </div>
+    <script src="{{ url_for('static', filename='scripts/login.js') }}"></script>
+</body>
+</html>
